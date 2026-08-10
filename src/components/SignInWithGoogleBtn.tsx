@@ -19,7 +19,7 @@ const SigninWithGoogleBtn = () => {
     >
       <img
         src={"/images/google-signin-g.svg"}
-        alt="login with google"
+        alt="sign in with google"
       />
     </Button>
   )

@@ -19,7 +19,7 @@ const SignupPage = () => {
           </CardTitle>
           <CardDescription>
             <p className="text-center">
-              Enter your email, password below to signup
+              Enter your email, password below to sign up
             </p>
           </CardDescription>
         </CardHeader>

@@ -15,7 +15,7 @@ const Header = () => {
       await authClient.signOut();
       return;
     }
-    router.push("/login");
+    router.push("/signin");
   }
 
   return (
@@ -31,9 +31,9 @@ const Header = () => {
               HOME
             </Link>
             <Link
-              href={"/login"}
+              href={"/signin"}
             >
-              LOGIN
+              Sign In
             </Link>
             <Link
               href={"/about-us"}
@@ -52,7 +52,7 @@ const Header = () => {
               onClick={handleSignoutClick}
             >
               {
-                session ? "Sign Out" : "Sign In"
+                session ? "Sign Out" : "User is not logged in"
               }
             </Button>
           </div>

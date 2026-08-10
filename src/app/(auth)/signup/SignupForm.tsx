@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-// import { useSignupMutation } from "@/services/auth";
-// import { signupMutationFn } from "@/services/auth/mutations";
+import { useSignupMutation } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,7 +20,7 @@ const formSchema = z.object({
 })
 
 const SignupForm = () => {
-  // const signupMutation = useSignupMutation();
+  const signupMutation = useSignupMutation();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,6 +34,7 @@ const SignupForm = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const {
+      email,
       password, confirmPassword
     } = data;
 
@@ -44,14 +44,20 @@ const SignupForm = () => {
     }
 
     try {
-      // await signupMutation.mutateAsync(data);
+      const result = await signupMutation.mutateAsync({
+        email,
+        name: email,
+        password: confirmPassword,
+        callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}/signin`
+      });
       toast.info("Signed up successfully.", {
         position: "bottom-right"
       });
       form.reset();
-      router.push("/login");
+      router.push("/signin");
     } catch (err: any) {
-      const errMessage = err.response.data.message;
+      // This is betterauth error object.
+      const errMessage = err.message;
       toast.error(errMessage, {
         position: "bottom-right",
       })
@@ -137,8 +143,8 @@ const SignupForm = () => {
               type="button"
               asChild
             >
-              <Link href={"/login"}>
-                Login
+              <Link href={"/signin"}>
+                Sign in
               </Link>
             </Button>
             <Button
@@ -146,13 +152,13 @@ const SignupForm = () => {
               type="submit"
             >
               <span>
-                Singup
+                Sign up
               </span>
-              {/* {
-              signupMutation.isPending && (
-                <Spinner />
-              )
-            } */}
+              {
+                signupMutation.isPending && (
+                  <Spinner />
+                )
+              }
             </Button>
           </div>
         </div>

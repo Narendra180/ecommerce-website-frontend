@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
+import { useSignInMutation } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,7 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-type LoginFormProps = {
+type SignInFormProps = {
 
 }
 
@@ -21,12 +23,12 @@ const formSchema = z.object({
   password: z.string().min(1, { error: "Please enter password" })
 })
 
-const LoginForm = ({
+const SignInForm = ({
 
-}: LoginFormProps) => {
+}: SignInFormProps) => {
   const router = useRouter();
 
-  // const loginMutation = useLoginMutation();
+  const signInMutation = useSignInMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,14 +40,15 @@ const LoginForm = ({
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      // await loginMutation.mutateAsync(data);
+      const result = await signInMutation.mutateAsync(data);
       toast.info("Logged in successfully.", {
         position: "bottom-right"
       });
       form.reset();
-      router.push("/dashboard");
+      router.push("/");
     } catch (err: any) {
-      const errMessage = err.response.data.message;
+      // This is betterauth error object.
+      const errMessage = err.message;
       toast.error(errMessage, {
         position: "bottom-right",
       })
@@ -112,7 +115,7 @@ const LoginForm = ({
                 asChild
               >
                 <Link href={"/signup"}>
-                  Signup
+                  Sign up
                 </Link>
               </Button>
             }
@@ -122,13 +125,13 @@ const LoginForm = ({
               type="submit"
             >
               <span>
-                Login
+                Sign in
               </span>
-              {/* {
-              loginMutation.isPending && (
+              {
+              signInMutation.isPending && (
                 <Spinner />
               )
-            } */}
+            }
             </Button>
           </div>
         </div>
@@ -140,4 +143,4 @@ const LoginForm = ({
   )
 }
 
-export default LoginForm;
+export default SignInForm;
