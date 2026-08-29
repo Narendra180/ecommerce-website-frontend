@@ -10,7 +10,13 @@ type SignInReqBody = {
   password: string;
 }
 
+type ResendVerificationEmailReqBody = {
+  email: string;
+  callback: string;
+}
+
 export type {
   SignUpReqBody,
-  SignInReqBody
+  SignInReqBody,
+  ResendVerificationEmailReqBody
 }

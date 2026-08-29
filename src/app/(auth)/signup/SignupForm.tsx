@@ -6,6 +6,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useSignupMutation } from "@/services/auth";
+import { useGlobalStore } from "@/store/globalStore/globalStoreHook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,8 @@ const formSchema = z.object({
 const SignupForm = () => {
   const signupMutation = useSignupMutation();
   const router = useRouter();
+
+  const setEmailToVerify = useGlobalStore(state => state.setEmailToVerify);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,15 +49,13 @@ const SignupForm = () => {
     try {
       const result = await signupMutation.mutateAsync({
         email,
-        name: email,
+        name: "userName",
         password: confirmPassword,
         callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}/signin`
       });
-      toast.info("Signed up successfully.", {
-        position: "bottom-right"
-      });
+      setEmailToVerify(email);
       form.reset();
-      router.push("/signin");
+      router.push("/verify-email");
     } catch (err: any) {
       // This is betterauth error object.
       const errMessage = err.message;

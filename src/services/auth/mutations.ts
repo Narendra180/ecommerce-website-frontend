@@ -1,5 +1,5 @@
 import { authClient } from "@/lib/auth-client";
-import type { SignInReqBody, SignUpReqBody } from "@/types/services/auth/types";
+import type { ResendVerificationEmailReqBody, SignInReqBody, SignUpReqBody } from "@/types/services/auth/types";
 
 const signUpMutationFn = async (reqBody: SignUpReqBody) => {
   const {
@@ -17,7 +17,17 @@ const signInMutationFn = async (reqBody: SignInReqBody) => {
   return data;
 }
 
+const resendVerificationEmailMutationFn = async (reqBody: ResendVerificationEmailReqBody) => {
+  const {
+    data, error
+  } = await authClient.sendVerificationEmail(reqBody)
+  if (error) throw error;
+  return data;
+}
+
 export {
-  signInMutationFn, signUpMutationFn
+  signInMutationFn,
+  signUpMutationFn,
+  resendVerificationEmailMutationFn
 };
 

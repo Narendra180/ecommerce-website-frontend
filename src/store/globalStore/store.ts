@@ -2,17 +2,17 @@ import type { LoggedInUser } from "@/types";
 import { create, createStore } from "zustand";
 
 type State = {
-  loggedInUser: LoggedInUser | null;
+  emailToVerify: string | null;
 }
 
 type Action = {
-  setLoggedInUser: (userObj: LoggedInUser) => void;
+  setEmailToVerify: (email: string | null) => void;
 }
 
 export type GlobalStore = State & Action;
 
 export const defaultInitState: State = {
-  loggedInUser: null
+  emailToVerify: null
 }
 
 export const createGlobalStore = (
@@ -21,12 +21,10 @@ export const createGlobalStore = (
   return createStore<GlobalStore>()((set) => {
     return {
       ...initState,
-      setLoggedInUser: (userObj) => {
-        set(() => {
-          return {
-            loggedInUser: userObj
-          }
-        });
+      setEmailToVerify: (email) => {
+        set({
+          emailToVerify: email
+        })
       }
     }
   });
