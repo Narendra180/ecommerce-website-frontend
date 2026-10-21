@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 
 function CountDown() {
-
+  let a = 3;
   const [value, setValue] = useState<number>(10);
   const timeoutRef = useRef<any>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
